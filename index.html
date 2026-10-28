@@ -784,25 +784,41 @@ svg.leaflet-image-layer.leaflet-interactive path {
   @media(max-width:900px){.side-cta{display:none}}
 
   /* Hero logo plate */
-  /* Frosted-glass plate: heavy blur + saturation boost of the sky behind,
-     a soft light gradient, a bright top/left edge and an inner glow. */
-  .hero-logo{position:absolute;top:18%;right:var(--pad);padding:clamp(28px,3vw,44px) clamp(34px,3.6vw,56px);
-       border-radius:14px;overflow:hidden;isolation:isolate;
-       background:linear-gradient(135deg, rgba(255,255,255,.22) 0%, rgba(255,255,255,.08) 45%, rgba(var(--ink-rgb),.28) 100%);
-       backdrop-filter:blur(22px) saturate(170%) brightness(.92);
-       -webkit-backdrop-filter:blur(22px) saturate(170%) brightness(.92);
-       border:1px solid rgba(255,255,255,.28);border-top-color:rgba(255,255,255,.55);border-left-color:rgba(255,255,255,.42);
-       box-shadow:0 30px 80px rgba(0,0,0,.35), 0 8px 24px rgba(0,0,0,.18),
-                  inset 0 1px 0 rgba(255,255,255,.45), inset 0 0 40px rgba(255,255,255,.08)}
-  /* Sheen across the upper half of the glass */
-  .hero-logo::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
-       background:radial-gradient(120% 70% at 20% 0%, rgba(255,255,255,.28), transparent 60%),
-                  radial-gradient(90% 60% at 100% 100%, rgba(245,148,65,.14), transparent 70%)}
-  /* Fine grain so the frost reads as glass, not flat tint */
-  .hero-logo::after{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;opacity:.12;mix-blend-mode:overlay;
-       background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
-  .hero-logo img{width:clamp(200px,18vw,270px);height:auto;display:block;position:relative;
-       filter:drop-shadow(0 2px 10px rgba(0,0,0,.35))}
+  /* Liquid-glass plate: clearer, brighter frost that refracts the sunset behind it,
+     a light-catching gradient rim, layered inner highlights, grain and a slow sheen. */
+  .hero-logo{position:absolute;top:18%;right:var(--pad);padding:clamp(30px,3.2vw,48px) clamp(36px,3.8vw,60px);
+       border-radius:22px;overflow:hidden;isolation:isolate;
+       background:
+         linear-gradient(155deg, rgba(255,255,255,.30) 0%, rgba(255,255,255,.10) 38%, rgba(255,255,255,.04) 62%, rgba(255,255,255,.14) 100%);
+       backdrop-filter:blur(30px) saturate(210%) brightness(1.06) contrast(1.04);
+       -webkit-backdrop-filter:blur(30px) saturate(210%) brightness(1.06) contrast(1.04);
+       box-shadow:
+         0 40px 100px rgba(0,0,0,.38), 0 12px 30px rgba(0,0,0,.22),
+         inset 0 1.5px 0 rgba(255,255,255,.75),
+         inset 0 -1px 0 rgba(255,255,255,.18),
+         inset 1px 0 0 rgba(255,255,255,.35),
+         inset 0 0 0 1px rgba(255,255,255,.10),
+         inset 0 18px 40px -18px rgba(255,255,255,.45),
+         inset 0 -24px 50px -24px rgba(245,148,65,.35)}
+  /* Gradient rim: bright where light hits (top-left), fading around the edge */
+  .hero-logo::before{content:"";position:absolute;inset:0;border-radius:inherit;padding:1.5px;z-index:1;pointer-events:none;
+       background:linear-gradient(140deg, rgba(255,255,255,.95), rgba(255,255,255,.25) 30%, rgba(255,255,255,.06) 55%, rgba(255,214,170,.55) 100%);
+       -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+       -webkit-mask-composite:xor;mask-composite:exclude}
+  /* Specular highlights + fine grain so it reads as real frosted glass */
+  .hero-logo::after{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
+       background:
+         radial-gradient(110% 60% at 15% -10%, rgba(255,255,255,.45), transparent 55%),
+         radial-gradient(70% 50% at 100% 110%, rgba(245,148,65,.22), transparent 70%),
+         url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.16'/%3E%3C/svg%3E")}
+  /* Slow diagonal light sweep across the glass */
+  .glass-sweep{position:absolute;top:-60%;left:-80%;width:55%;height:220%;z-index:0;pointer-events:none;
+       background:linear-gradient(100deg, transparent 0%, rgba(255,255,255,.0) 30%, rgba(255,255,255,.28) 50%, rgba(255,255,255,0) 70%, transparent 100%);
+       transform:rotate(18deg);animation:glassSweep 7s ease-in-out 1.2s infinite}
+  @keyframes glassSweep{0%{left:-80%}45%,100%{left:140%}}
+  @media(prefers-reduced-motion:reduce){.glass-sweep{display:none}}
+  .hero-logo img{width:clamp(200px,18vw,270px);height:auto;display:block;position:relative;z-index:2;
+       filter:drop-shadow(0 2px 12px rgba(0,0,0,.4)) drop-shadow(0 0 1px rgba(0,0,0,.25))}
 
   .two-col{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:start}
 
@@ -872,19 +888,6 @@ svg.leaflet-image-layer.leaflet-interactive path {
   .side-photos.fill .photo-frame{flex:1;display:flex}
   .side-photos.fill .side-photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 
-  /* Fortune 1000 (recreated from "San Antonio Fortune 1000.pdf") */
-  .f1000{position:relative;margin-top:72px;border:1px solid rgba(184,186,188,.45);
-       padding:clamp(44px,5vw,64px) clamp(20px,3vw,40px) clamp(28px,3vw,40px)}
-  .f1000-title{position:absolute;top:0;left:-2px;transform:translateY(-55%);padding:0 24px 6px 2px;
-       background:var(--ink);font-family:var(--font-body);font-weight:700;letter-spacing:-.02em;
-       font-size:clamp(34px,4.2vw,58px);line-height:1;text-transform:uppercase;color:#b8babc}
-  .f1000-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:clamp(16px,3vw,44px)}
-  .f1000-co{display:flex;flex-direction:column;align-items:center;transition:transform .25s ease}
-  .f1000-co:hover{transform:translateY(-3px)}
-  .f1000-logo{width:100%;height:130px;display:flex;align-items:center;justify-content:center;
-       border-bottom:1px solid rgba(184,186,188,.45);padding-bottom:12px}
-  .f1000-logo img{max-width:100%;max-height:118px;width:auto;height:auto}
-  .f1000-rank{font-family:"Abril Fatface",Georgia,serif;font-size:clamp(26px,2.6vw,38px);color:#b8babc;margin-top:10px}
   .logo-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:14px;margin-top:24px}
   .logo-tile{background:var(--navy);border-radius:4px;padding:20px;height:100px;
        display:flex;align-items:center;justify-content:center;
@@ -1006,7 +1009,6 @@ svg.leaflet-image-layer.leaflet-interactive path {
     .logo-grid{grid-template-columns:repeat(2,1fr)}
     .figures,.figures.four,.figures.in-col{grid-template-columns:1fr}
     .demand-cards{grid-template-columns:1fr}
-    .f1000-grid{grid-template-columns:repeat(2,1fr);row-gap:28px}
     .side-photos.fill .side-photo{min-height:260px}
     .dc-icon{flex-basis:76px}
     .dc-icon img{width:48px}
@@ -1053,6 +1055,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
     <div style="position:absolute;inset:0;background:linear-gradient(to top, rgba(var(--ink-rgb),.8) 0%, rgba(var(--ink-rgb),.3) 26%, transparent 46%)"></div>
 
     <div class="hero-logo">
+      <span class="glass-sweep" aria-hidden="true"></span>
       <img src="images/logo-emily-morgan-white.svg" alt="The Emily Morgan Hotel — A DoubleTree by Hilton" />
     </div>
 
@@ -1078,8 +1081,8 @@ svg.leaflet-image-layer.leaflet-interactive path {
       </div>
       <div class="two-col" style="margin-top:48px">
         <div id="overview-copy-col">
-          <p class="lead">Hodges Ward Elliott (“HWE”) is pleased to offer the opportunity to acquire the <strong>Emily Morgan Hotel</strong> (“Property” or “Hotel”), an iconic 177-room hotel overlooking the Alamo in the heart of downtown San Antonio. The Hotel sits steps from the famous San Antonio River Walk and the recently expanded Henry B. Gonzalez Convention Center, and is just 15 minutes from San Antonio International Airport, which has begun construction on a <strong>new $1.68-billion terminal</strong>. Now the seventh-largest city in the U.S., San Antonio has ranked among the nation’s leaders in population growth in recent years, a trend that continues to support the local hospitality market.</p>
-          <p class="lead" style="margin-top:20px">Located within a <strong>five-mile radius of 48.7 million square feet of office and industrial space</strong>, the Property also draws on a deep base of corporate demand beyond its leisure core. Looking ahead, the Emily Morgan is well-positioned to benefit from Project Marvel, a planned <strong>$4-billion sports and entertainment district</strong> anchored by a new Spurs arena at Hemisfair, and the <strong>$550-million redevelopment</strong> of Alamo Plaza. The fee-simple offering presents a unique opportunity to own an institutional-quality, historic hotel, situated at an irreplaceable location in one of the Sun Belt’s most rapidly expanding metropolitan areas.</p>
+          <p class="lead">Hodges Ward Elliott (“HWE”) is pleased to offer the opportunity to acquire <strong>The Emily Morgan Hotel</strong> (“Property” or “Hotel”), an iconic 177-room hotel overlooking the Alamo in the heart of downtown San Antonio. The Hotel sits steps from the famous San Antonio River Walk and the recently expanded Henry B. González Convention Center, and is just 15 minutes from San Antonio International Airport, which has begun construction on a <strong>new $1.68-billion terminal</strong>. Now the seventh-largest city in the U.S., San Antonio has ranked among the nation’s leaders in population growth in recent years, a trend that continues to support the local hospitality market.</p>
+          <p class="lead" style="margin-top:20px">Located within a <strong>five-mile radius of 48.7 million square feet of office and industrial space</strong>, the Property also draws on a deep base of corporate demand beyond its leisure core. Looking ahead, The Emily Morgan is well-positioned to benefit from Project Marvel, a planned <strong>$4-billion sports and entertainment district</strong> anchored by a new Spurs arena at Hemisfair, and the <strong>$550-million redevelopment</strong> of Alamo Plaza. The fee-simple offering presents a unique opportunity to own an institutional-quality, historic hotel, situated at an irreplaceable location in one of the Sun Belt’s most rapidly expanding metropolitan areas.</p>
           <div style="margin-top:36px;display:flex;gap:16px;flex-wrap:wrap">
             <a href="#" target="_blank" rel="noopener" class="btn btn-cta">Sign CA Online</a>
             <a href="#" download class="btn btn-ghost">Download CA (DOCX)</a>
@@ -1090,13 +1093,12 @@ svg.leaflet-image-layer.leaflet-interactive path {
         <div class="stats-card" id="overview-stats-card">
           <div class="stats-grid">
             <div class="stat-cell full"><div class="stat-value" style="font-size:18px">705 E Houston St<br>San Antonio, TX 78205</div><div class="stat-label">Address</div></div>
-            <div class="stat-cell"><div class="stat-value">1923</div><div class="stat-label">Year Opened</div></div>
+            <div class="stat-cell"><div class="stat-value">1924</div><div class="stat-label">Year Opened</div></div>
             <div class="stat-cell"><div class="stat-value">177</div><div class="stat-label">Keys</div></div>
             <div class="stat-cell"><div class="stat-value">13</div><div class="stat-label">Stories</div></div>
             <div class="stat-cell"><div class="stat-value">3,592 SF</div><div class="stat-label">Meeting Space</div></div>
             <div class="stat-cell full"><div class="stat-value">ORO Bar, ORO Restaurant</div><div class="stat-label">F&amp;B</div></div>
             <div class="stat-cell full"><div class="stat-value" style="font-size:17px">Fitness Center, Business Center, Concierge</div><div class="stat-label">Amenities</div></div>
-            <div class="stat-cell full"><div class="stat-value" style="font-size:17px">Complimentary On-Site Surface Parking</div><div class="stat-label">Parking</div></div>
             <div class="stat-cell"><div class="stat-value">Hilton</div><div class="stat-label">Affiliation</div></div>
             <div class="stat-cell"><div class="stat-value">Fee Simple</div><div class="stat-label">Interest Conveyed</div></div>
             <div class="stat-cell"><div class="stat-value">Unencumbered</div><div class="stat-label">Management</div></div>
@@ -1163,7 +1165,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
         <div class="two-col" style="margin-top:24px">
           <div>
             <p class="lead" style="max-width:68ch;margin-top:0">The 177-room Emily Morgan overlooks the Alamo, giving the Property an address no competitor can replicate. The Alamo Plaza is currently undergoing a <strong>$550-million redevelopment which is estimated to have an economic impact of $11.3 billion over its first five years of operation</strong>. Additionally, guests are steps from the River Walk, which ranks alongside the Alamo as one of the two most popular attractions in Texas. Other nearby attractions include The Shops at Rivercenter, La Villita, Hemisfair, and the Tower of the Americas, contributing to <strong>San Antonio’s annual visitation of roughly 40 million people</strong>. The Hotel has a premier location in the center of these demand drivers and is roughly 15 minutes by car from San Antonio International Airport, providing easy access for fly-in leisure, group, and corporate travelers.</p>
-            <p class="lead" style="max-width:68ch;margin-top:20px">Beyond leisure travel, the Property is within walking distance of the 1.6-million-square-foot Henry B. Gonzalez Convention Center, which hosts more than 300 events each year and recently underwent a $325-million renovation. Furthermore, <strong>the Hotel is within one mile of approximately 11.2 million square feet of office space and 4.4 million square feet of retail</strong>, including the headquarters of major employers H-E-B and Frost Bank. UTSA’s Downtown Campus and nearby healthcare providers add further depth to Downtown’s economic base. With more than <strong>$4.5 billion in planned investment</strong> underway nearby through the Alamo Plaza redevelopment and Project Marvel, the Emily Morgan is well-positioned to capture downtown’s next wave of growth.</p>
+            <p class="lead" style="max-width:68ch;margin-top:20px">Beyond leisure travel, the Property is within walking distance of the 1.6-million-square-foot Henry B. González Convention Center, which hosts more than 300 events each year and recently underwent a $325-million renovation. Furthermore, <strong>the Hotel is within one mile of approximately 11.2 million square feet of office space and 4.4 million square feet of retail</strong>, including the headquarters of major employers H-E-B and Frost Bank. UTSA’s Downtown Campus and nearby healthcare providers add further depth to Downtown’s economic base. With more than <strong>$4.5 billion in planned investment</strong> underway nearby through the Alamo Plaza redevelopment and Project Marvel, The Emily Morgan is well-positioned to capture downtown’s next wave of growth.</p>
           </div>
           <div class="side-photos tall">
             <div class="side-photo">
@@ -1197,7 +1199,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
           <div class="demand-card"><div class="dc-icon"><img src="images/icons/frost-tower-icon.svg" alt=""></div><div class="dc-body"><div class="dc-title">Frost Tower – new 23-story,</div><div class="dc-desc">460,000-SF Class A++ skyscraper</div></div></div>
           <div class="demand-card"><div class="dc-icon"><img src="images/icons/cps-energy-icon.svg" alt=""></div><div class="dc-body"><div class="dc-title">CPS Energy headquarters – new $200-million,</div><div class="dc-desc">430,000-SF office buildings</div></div></div>
           <div class="demand-card"><div class="dc-icon"><img src="images/icons/usaa-icon.svg" alt=""></div><div class="dc-body"><div class="dc-title">USAA’s expansion</div><div class="dc-desc">+$150-million investment and 1,100 new employees in 2025</div></div></div>
-          <div class="demand-card"><div class="dc-icon"><img src="images/icons/henry-b.gonzalez-icon.svg" alt=""></div><div class="dc-body"><div class="dc-title">$325-million renovation/expansion</div><div class="dc-desc">of the Henry B. Gonzalez Convention Center</div></div></div>
+          <div class="demand-card"><div class="dc-icon"><img src="images/icons/henry-b.gonzalez-icon.svg" alt=""></div><div class="dc-body"><div class="dc-title">$325-million renovation/expansion</div><div class="dc-desc">of the Henry B. González Convention Center</div></div></div>
           <div class="demand-card"><div class="dc-icon"><img src="images/icons/hemisfair-icon.svg" alt=""></div><div class="dc-body"><div class="dc-title">Hemisfair Park redevelopment</div></div></div>
           <div class="demand-card"><div class="dc-icon"><img src="images/icons/pearl-brewery-icon.svg" alt=""></div><div class="dc-body"><div class="dc-title">Complete redevelopment</div><div class="dc-desc">of the 18-acre Pearl Brewery District</div></div></div>
           <div class="demand-card"><div class="dc-icon"><img src="images/icons/theatres-icon.svg" alt=""></div><div class="dc-body"><div class="dc-title">Renovations of Alameda &amp; Aztec Theatres</div></div></div>
@@ -1220,7 +1222,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
         <div class="logo-grid">
           <div class="logo-tile"><img src="images/logos/the-alamo-logo.svg" alt="The Alamo"></div>
           <div class="logo-tile"><img src="images/logos/san-antonio-riverwalk-logo-white.svg" alt="San Antonio River Walk"></div>
-          <div class="logo-tile"><img src="images/logos/henry-b-gonzales-convention-center-logo-white.svg" alt="Henry B. Gonzalez Convention Center"></div>
+          <div class="logo-tile"><img src="images/logos/henry-b-gonzales-convention-center-logo-white.svg" alt="Henry B. González Convention Center"></div>
           <div class="logo-tile"><img src="images/logos/hemisfair-logo_white.svg" alt="Hemisfair"></div>
           <div class="logo-tile"><img src="images/logos/project-marvel-logo-white.svg" alt="Project Marvel"></div>
           <div class="logo-tile"><img src="images/logos/h-e-b_logo.svg" alt="H-E-B"></div>
@@ -1243,7 +1245,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
             <li data-index="1"><span class="dot"></span> 0.1 miles to Shops at Rivercenter</li>
             <li data-index="2"><span class="dot"></span> 0.5 miles to the San Antonio River Walk</li>
             <li data-index="3"><span class="dot"></span> 0.6 miles to La Villita Historic Arts Village</li>
-            <li data-index="4"><span class="dot"></span> 0.6 miles to the Henry B. Gonzalez Convention Center</li>
+            <li data-index="4"><span class="dot"></span> 0.6 miles to the Henry B. González Convention Center</li>
             <li data-index="5"><span class="dot"></span> 1.1 miles to the Tower of the Americas</li>
           </ul>
         </div>
@@ -1265,8 +1267,8 @@ svg.leaflet-image-layer.leaflet-interactive path {
             <div class="loc-card-overlay"><div class="loc-card-title">La Villita Historic Arts Village</div><div class="loc-card-desc">0.6 Miles</div></div>
           </div>
           <div class="loc-card" data-index="4">
-            <img src="images/loc-hbg-2.jpg" alt="Henry B. Gonzalez Convention Center" />
-            <div class="loc-card-overlay"><div class="loc-card-title">Henry B. Gonzalez Convention Center</div><div class="loc-card-desc">0.6 Miles</div></div>
+            <img src="images/loc-hbg-2.jpg" alt="Henry B. González Convention Center" />
+            <div class="loc-card-overlay"><div class="loc-card-title">Henry B. González Convention Center</div><div class="loc-card-desc">0.6 Miles</div></div>
           </div>
           <div class="loc-card" data-index="5">
             <img src="images/loc-tower.jpg" alt="Tower of the Americas" />
@@ -1285,7 +1287,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
     <div class="wrap">
       <h2 class="h2">$4-Billion Project Marvel Development</h2>
       <div class="two-col" style="margin-top:24px">
-        <p class="lead" style="max-width:68ch;margin-top:0">Project Marvel is a masterplan to create a <strong>$4-billion downtown sports and entertainment district</strong> in the heart of Downtown San Antonio. Approved by voters in 2025, it represents a significant opportunity to expand the city’s convention, sports, and entertainment industries. The project centers on a new <strong>$1.3-billion San Antonio Spurs arena</strong>, a proposed expansion of the Henry B. González Convention Center, planned Alamodome upgrades, and additional mixed-use development at Hemisfair. The broader initiative could <strong>generate an estimated $18.7 billion in economic output over 30 years, support over 3,300 full and part-time jobs annually, and attract nearly 2.5 million annual visitors</strong>. Located within walking distance of the district, the Emily Morgan is uniquely situated to benefit from increased visitation associated with future conventions, sporting events, concerts, and surrounding development.</p>
+        <p class="lead" style="max-width:68ch;margin-top:0">Project Marvel is a masterplan to create a <strong>$4-billion downtown sports and entertainment district</strong> in the heart of Downtown San Antonio. Approved by voters in 2025, it represents a significant opportunity to expand the city’s convention, sports, and entertainment industries. The project centers on a new <strong>$1.3-billion San Antonio Spurs arena</strong>, a proposed expansion of the Henry B. González Convention Center, planned Alamodome upgrades, and additional mixed-use development at Hemisfair. The broader initiative could <strong>generate an estimated $18.7 billion in economic output over 30 years, support over 3,300 full and part-time jobs annually, and attract nearly 2.5 million annual visitors</strong>. Located within walking distance of the district, The Emily Morgan is uniquely situated to benefit from increased visitation associated with future conventions, sporting events, concerts, and surrounding development.</p>
         <div class="side-photos tall">
           <div class="side-photo">
             <div class="photo-frame">
@@ -1320,23 +1322,23 @@ svg.leaflet-image-layer.leaflet-interactive path {
   <!-- HIGHLIGHT 03 -->
   <section class="section highlight-section" style="background:var(--navy)">
     <div class="wrap">
-      <h2 class="h2">Steps from the Henry B. Gonzalez Convention Center</h2>
+      <h2 class="h2">Steps from the Henry B. González Convention Center</h2>
       <div class="two-col" style="margin-top:24px">
         <div>
-          <p class="lead" style="max-width:68ch;margin-top:0">The <strong>1.6-million-square-foot Henry B. Gonzalez Convention Center</strong>, located within walking distance of the Hotel, anchors San Antonio’s meetings and events industry. Following a <strong>$325-million expansion</strong> completed in 2016, the facility offers 514,000 square feet of contiguous exhibit space, 70 meeting rooms, and the 54,000-square-foot Stars at Night Ballroom, the largest in Texas. Demand for the space remains strong. <strong>In fiscal year 2025, convention center bookings generated an estimated $703 million in economic impact.</strong></p>
+          <p class="lead" style="max-width:68ch;margin-top:0">The <strong>1.6-million-square-foot Henry B. González Convention Center</strong>, located within walking distance of the Hotel, anchors San Antonio’s meetings and events industry. Following a <strong>$325-million expansion</strong> completed in 2016, the facility offers 514,000 square feet of contiguous exhibit space, 70 meeting rooms, and the 54,000-square-foot Stars at Night Ballroom, the largest in Texas. Demand for the space remains strong. <strong>In fiscal year 2025, convention center bookings generated an estimated $703 million in economic impact.</strong></p>
           <p class="lead" style="max-width:68ch;margin-top:20px">Looking ahead, the City of San Antonio has named the convention center one of its top priorities within Project Marvel. Plans call for an expansion of nearly 200,000 square feet on the facility’s western end next to Civic Park at Hemisfair, with early city estimates placing the cost between $700 million and $900 million. Visit San Antonio estimates the city turned away at least $700 million in convention business over a six-year period because the existing facility couldn’t accommodate larger groups, showcasing the need for an expansion of the space. A larger center will let San Antonio compete for bigger citywide events, and the Property is exceptionally well-positioned to capitalize on the increased demand.</p>
         </div>
         <div class="side-photos tall">
           <div class="side-photo">
             <div class="photo-frame">
-              <img src="images/h3-hbg-1.jpg" alt="Henry B. Gonzalez Convention Center" />
-              <div class="photo-label">Henry B. Gonzalez Convention Center</div>
+              <img src="images/h3-hbg-1.jpg" alt="Henry B. González Convention Center" />
+              <div class="photo-label">Henry B. González Convention Center</div>
             </div>
           </div>
           <div class="side-photo">
             <div class="photo-frame">
-              <img src="images/h3-hbg-2.jpg" alt="Henry B. Gonzalez Convention Center at dusk" />
-              <div class="photo-label">Henry B. Gonzalez Convention Center</div>
+              <img src="images/h3-hbg-2.jpg" alt="Henry B. González Convention Center at dusk" />
+              <div class="photo-label">Henry B. González Convention Center</div>
             </div>
           </div>
         </div>
@@ -1355,7 +1357,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
   <!-- HIGHLIGHT 04 -->
   <section class="section highlight-section" style="background:var(--ink)">
     <div class="wrap">
-      <h2 class="h2">San Antonio, TX &ndash; One of the Fastest-Growing Cities in the U.S</h2>
+      <h2 class="h2">San Antonio, TX &ndash; One of the Fastest-Growing Cities in the U.S.</h2>
       <div class="two-col" style="margin-top:24px;align-items:stretch">
         <div>
           <p class="lead" style="max-width:68ch;margin-top:0">San Antonio, <strong>the second-largest city in Texas</strong> and the <strong>nation’s seventh-most populous</strong>, boasts a population of approximately <strong>1.5 million residents</strong> and added <strong>more new residents than any other U.S. city in 2023</strong>. The city has continued its rapid growth, seeing the <strong>fourth-highest population increase throughout the U.S. in 2024</strong>. This trend is expected to keep pace in the future as San Antonio is the center of economic activity and commerce in South Central Texas. Numerous major corporate headquarters call the area home, including Fortune 500 companies <strong>Valero Energy (#40)</strong> and <strong>USAA (#93)</strong>, along with iHeartMedia, Cullen/Frost Bankers, and Rackspace Technology. The city is also home to H-E-B, one of the nation’s largest private companies, as well as several major U.S. military bases.</p>
@@ -1383,16 +1385,6 @@ svg.leaflet-image-layer.leaflet-interactive path {
           </div>
         </div>
       </div>
-      <div class="f1000">
-        <div class="f1000-title">Fortune 1000</div>
-        <div class="f1000-grid">
-          <div class="f1000-co"><div class="f1000-logo"><img src="images/fortune/valero-gray.svg" alt="Valero"></div><div class="f1000-rank">#40</div></div>
-          <div class="f1000-co"><div class="f1000-logo"><img src="images/fortune/usaa-gray.svg" alt="USAA"></div><div class="f1000-rank">#93</div></div>
-          <div class="f1000-co"><div class="f1000-logo"><img src="images/fortune/iheart-media-gray.svg" alt="iHeartMedia"></div><div class="f1000-rank">#796</div></div>
-          <div class="f1000-co"><div class="f1000-logo"><img src="images/fortune/cullen-frost-bankers-gray.svg" alt="Cullen/Frost Bankers, Inc."></div><div class="f1000-rank">#949</div></div>
-          <div class="f1000-co"><div class="f1000-logo"><img src="images/fortune/rackspace-technology-gray.svg" alt="Rackspace Technology"></div><div class="f1000-rank">#978</div></div>
-        </div>
-      </div>
     </div>
   </section>
 
@@ -1402,7 +1394,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="two-col" style="align-items:center">
         <div>
           <h2 class="h2">A True San Antonio Landmark</h2>
-          <p class="lead" style="max-width:68ch;margin-top:20px">Dating back to 1924, the Emily Morgan is one of the most recognizable buildings in downtown San Antonio. Architect Ralph Cameron designed the 13-story Gothic Revival tower as the Medical Arts Building, complete with terra cotta gargoyles that each portray a different medical ailment. After five decades as home to the city’s doctors, the building was converted to office space in <strong>1976 and listed on the National Register of Historic Places</strong> the following year. Hoteliers reopened it as the Emily Morgan Hotel in 1984, and in <strong>2015 it was inducted into Historic Hotels of America</strong>. Today, a century of history gives the Property a character no new-build competitor can replicate.</p>
+          <p class="lead" style="max-width:68ch;margin-top:20px">Dating back to 1924, The Emily Morgan is one of the most recognizable buildings in downtown San Antonio. Architect Ralph Cameron designed the 13-story Gothic Revival tower as the Medical Arts Building, complete with terra cotta gargoyles that each portray a different medical ailment. After five decades as home to the city’s doctors, the building was converted to office space in <strong>1976 and listed on the National Register of Historic Places</strong> the following year. Hoteliers reopened it as The Emily Morgan Hotel in 1984, and in <strong>2015 it was inducted into Historic Hotels of America</strong>. Today, a century of history gives the Property a character no new-build competitor can replicate.</p>
         </div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
           <div class="photo-frame"><img src="images/h5-tower.jpg" alt="The Emily Morgan Gothic Revival tower" style="width:100%;height:460px;object-fit:cover" /></div>
@@ -1495,7 +1487,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       { name: "Tobin Center for the Performing Arts", dist: "0.4 mi", lat: 29.4325, lng: -98.4856 },
       { name: "San Antonio River Walk", dist: "0.5 mi", lat: 29.4240, lng: -98.4890 },
       { name: "La Villita Historic Arts Village", dist: "0.6 mi", lat: 29.4205, lng: -98.4890 },
-      { name: "Henry B. Gonzalez Convention Center", dist: "0.6 mi", lat: 29.4200, lng: -98.4830 },
+      { name: "Henry B. González Convention Center", dist: "0.6 mi", lat: 29.4200, lng: -98.4830 },
       { name: "Hemisfair", dist: "0.7 mi", lat: 29.4183, lng: -98.4860 },
       { name: "Bexar County Courthouse", dist: "0.8 mi", lat: 29.4238, lng: -98.4937 },
       { name: "Baptist Medical Center", dist: "0.8 mi", lat: 29.4307, lng: -98.4905 },
@@ -1721,7 +1713,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
     // Scroll-reveal: scale + fade content in as it enters the viewport.
     (function () {
       var SEL = ".h2, .eyebrow, .lead, .stats-card, .g-item, .photo-frame, "
-              + ".side-photo, #overview-photo, .logo-grid, .figure, .demand-card, .f1000, .location-cards, "
+              + ".side-photo, #overview-photo, .logo-grid, .figure, .demand-card, .location-cards, "
               + ".callout-list, .cta-buttons, .footer-grid";
       var els = Array.prototype.slice.call(document.querySelectorAll(SEL)).filter(function (el) {
         return !el.closest("#hero") && !el.closest(".nav");
