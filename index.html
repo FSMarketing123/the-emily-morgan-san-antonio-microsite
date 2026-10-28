@@ -824,6 +824,13 @@ svg.leaflet-image-layer.leaflet-interactive path {
   .two-col{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:start}
 
   /* Overview property-snapshot card */
+  /* Overview: both columns share one height — the photo fills whatever the copy
+     leaves, and the snapshot card stretches flush to the column's top and bottom */
+  .overview-cols{align-items:stretch}
+  #overview-copy-col{display:flex;flex-direction:column}
+  #overview-photo{flex:1 1 auto;height:100%;min-height:260px}
+  .stats-card{display:flex;flex-direction:column;height:100%}
+  .stats-grid{flex:1 1 auto}
   .stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
   .stat-cell{padding:22px 26px;background:var(--navy-lt);border:1px solid var(--divider);
        border-radius:2px;transition:transform .25s ease,box-shadow .25s ease;position:relative}
@@ -1080,7 +1087,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
         <img src="images/logo-emily-morgan-white.svg" alt="The Emily Morgan Hotel"
              style="width:clamp(150px,13vw,200px);height:auto;display:block" />
       </div>
-      <div class="two-col" style="margin-top:48px">
+      <div class="two-col overview-cols" style="margin-top:48px">
         <div id="overview-copy-col">
           <p class="lead">Hodges Ward Elliott (“HWE”) is pleased to offer the opportunity to acquire <strong>The Emily Morgan Hotel</strong> (“Property” or “Hotel”), an iconic 177-room hotel overlooking the Alamo in the heart of downtown San Antonio. The Hotel sits steps from the famous San Antonio River Walk and the recently expanded Henry B. González Convention Center, and is just 15 minutes from San Antonio International Airport, which has begun construction on a <strong>new $1.68-billion terminal</strong>. Now the seventh-largest city in the U.S., San Antonio has ranked among the nation’s leaders in population growth in recent years, a trend that continues to support the local hospitality market.</p>
           <p class="lead" style="margin-top:20px">Located within a <strong>five-mile radius of 48.7 million square feet of office and industrial space</strong>, the Property also draws on a deep base of corporate demand beyond its leisure core. Looking ahead, The Emily Morgan is well-positioned to benefit from Project Marvel, a planned <strong>$4-billion sports and entertainment district</strong> anchored by a new Spurs arena at Hemisfair, and the <strong>$550-million redevelopment</strong> of Alamo Plaza. The fee-simple offering presents a unique opportunity to own an institutional-quality, historic hotel, situated at an irreplaceable location in one of the Sun Belt’s most rapidly expanding metropolitan areas.</p>
@@ -1089,7 +1096,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
             <a href="#" download class="btn btn-ghost">Download CA (DOCX)</a>
           </div>
           <img id="overview-photo" src="images/overview.jpg" alt="The Emily Morgan Hotel rising above the Alamo grounds"
-               style="width:100%;height:260px;object-fit:cover;border-radius:2px;box-shadow:0 24px 80px rgba(0,0,0,.45);margin-top:36px;display:block" />
+               style="width:100%;object-fit:cover;border-radius:2px;box-shadow:0 24px 80px rgba(0,0,0,.45);margin-top:36px;display:block" />
         </div>
         <div class="stats-card" id="overview-stats-card">
           <div class="stats-grid">
@@ -1513,27 +1520,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       { name: "Valero Headquarters", dist: "16.3 mi", lat: 29.6160, lng: -98.5970 },
       { name: "SeaWorld San Antonio", dist: "18 mi", lat: 29.4583, lng: -98.6995 }
     ];
-    function syncOverviewPhotoHeight() {
-      var card = document.getElementById("overview-stats-card");
-      var col = document.getElementById("overview-copy-col");
-      var img = document.getElementById("overview-photo");
-      if (!card || !col || !img) return;
-      if (window.innerWidth <= 760) { img.style.height = "260px"; return; }
-      var priorHeight = img.style.height;
-      img.style.height = "0px";
-      var colHeightWithoutImg = col.offsetHeight;
-      img.style.height = priorHeight || "260px";
-      var cardHeight = card.offsetHeight;
-      var target = cardHeight - colHeightWithoutImg;
-      img.style.height = (target >= 220 ? target : 220) + "px";
-    }
-    window.addEventListener("load", syncOverviewPhotoHeight);
-    window.addEventListener("resize", syncOverviewPhotoHeight);
-    if (document.fonts && document.fonts.ready) {
-      document.fonts.ready.then(syncOverviewPhotoHeight);
-    }
     document.addEventListener("DOMContentLoaded", function () {
-      syncOverviewPhotoHeight();
       var navBar = document.querySelector(".nav");
       var navToggle = document.getElementById("nav-toggle");
       var navLinksPanel = document.getElementById("nav-links");
