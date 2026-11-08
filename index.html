@@ -866,6 +866,26 @@ svg.leaflet-image-layer.leaflet-interactive path {
   .side-photos.tall .side-photo img{height:270px}
   .wide-photo{position:relative;overflow:hidden}
   .wide-photo img{width:100%;height:clamp(320px,52vw,680px);object-fit:cover;display:block}
+  .wide-photo.pin-photo img{height:auto;aspect-ratio:2/1;object-fit:cover;object-position:50% 10%}
+  .photo-pin{position:absolute;left:28%;top:30%;display:flex;align-items:center;transform:translateY(-50%);pointer-events:none;width:max-content}
+  .photo-pin>span{flex:0 0 auto}
+  .pin-dot{position:relative;width:14px;height:14px;margin-left:-7px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 3px rgba(255,255,255,.9)}
+  .pin-dot::after{content:"";position:absolute;inset:-9px;border-radius:50%;border:2px solid var(--accent);animation:pinPulse 2.2s ease-out infinite}
+  @keyframes pinPulse{0%{transform:scale(.5);opacity:1}100%{transform:scale(1.6);opacity:0}}
+  .pin-line{width:clamp(48px,11vw,170px);height:2px;background:rgba(255,255,255,.85)}
+  .pin-tag{display:flex;flex-direction:column;gap:4px;padding:12px 18px;background:rgba(var(--ink-rgb),.72);
+    -webkit-backdrop-filter:blur(14px) saturate(160%);backdrop-filter:blur(14px) saturate(160%);
+    border:1px solid rgba(255,255,255,.22);border-left:3px solid var(--accent);border-radius:4px;box-shadow:0 12px 36px rgba(0,0,0,.45);white-space:nowrap}
+  .pin-eyebrow{font-family:Poppins,sans-serif;font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);font-weight:600}
+  .pin-name{font-family:"Abril Fatface",Georgia,serif;font-size:clamp(16px,1.6vw,24px);color:#fff;line-height:1.1}
+  @media (max-width:760px){
+    .wide-photo.pin-photo img{aspect-ratio:3/2;object-position:50% 0}
+    .photo-pin{top:25%}
+    .pin-line{width:22px}
+    .pin-tag{padding:7px 10px;gap:2px}
+    .pin-eyebrow{font-size:8px;letter-spacing:.16em}
+    .pin-name{font-size:13px}
+  }
 
   /* Figure callouts (highlighted figures from the copy) */
   .figures{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:48px}
@@ -1165,9 +1185,13 @@ svg.leaflet-image-layer.leaflet-interactive path {
 
   <!-- HIGHLIGHT 01 -->
   <section class="highlight-section" id="demand" style="background:var(--navy);padding:0">
-    <div class="wide-photo">
-      <img src="images/alamo-aerial.jpg" alt="Aerial view of the Alamo and Alamo Plaza" style="object-position:50% 60%" />
-      <div class="photo-label" style="padding:20px var(--pad)">The Alamo &amp; Alamo Plaza</div>
+    <div class="wide-photo pin-photo">
+      <img src="images/h5-night.jpg" alt="The Emily Morgan Hotel rising behind the Alamo at night" />
+      <div class="photo-pin" aria-hidden="true">
+        <span class="pin-dot"></span><span class="pin-line"></span>
+        <span class="pin-tag"><span class="pin-eyebrow">Subject Property</span><span class="pin-name">The Emily Morgan Hotel</span></span>
+      </div>
+      <div class="photo-label" style="padding:20px var(--pad)">The Emily Morgan &amp; The Alamo</div>
     </div>
     <div class="section" style="padding-top:56px;padding-bottom:0">
       <div class="wrap">
@@ -1416,11 +1440,6 @@ svg.leaflet-image-layer.leaflet-interactive path {
         <div class="figure"><div class="v">13</div><div class="l">Story Gothic Revival Tower</div></div>
         <div class="figure"><div class="v">1977</div><div class="l">National Register of Historic Places</div></div>
         <div class="figure"><div class="v">2015</div><div class="l">Historic Hotels of America</div></div>
-      </div>
-      <div class="photo-frame" style="margin-top:56px">
-        <img src="images/h5-night.jpg" alt="The Emily Morgan Hotel and the Alamo at night"
-             style="width:100%;height:auto;display:block" />
-        <div class="photo-label">The Emily Morgan &amp; The Alamo</div>
       </div>
     </div>
   </section>
