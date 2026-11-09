@@ -921,6 +921,8 @@ svg.leaflet-image-layer.leaflet-interactive path {
        display:flex;align-items:center;justify-content:center;
        transition:transform .3s ease,box-shadow .3s ease}
   .logo-tile img{max-width:82%;max-height:52px;display:block}
+  button.logo-tile{border:0;width:100%;font:inherit;color:inherit;cursor:pointer}
+  button.logo-tile:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
   .highlight-section[style*="--navy)"] .logo-tile{background:var(--ink)}
   .logo-tile:hover{transform:scale(1.06);box-shadow:0 18px 44px rgba(0,0,0,.45);z-index:2}
 
@@ -1253,18 +1255,18 @@ svg.leaflet-image-layer.leaflet-interactive path {
 
         <div class="eyebrow" style="margin-top:56px;margin-bottom:4px">Surrounded by Leading Demand Drivers</div>
         <div class="logo-grid">
-          <div class="logo-tile"><img src="images/logos/the-alamo-logo.svg" alt="The Alamo"></div>
-          <div class="logo-tile"><img src="images/logos/san-antonio-riverwalk-logo-white.svg" alt="San Antonio River Walk"></div>
-          <div class="logo-tile"><img src="images/logos/henry-b-gonzales-convention-center-logo-white.svg" alt="Henry B. González Convention Center"></div>
-          <div class="logo-tile"><img src="images/logos/hemisfair-logo_white.svg" alt="Hemisfair"></div>
-          <div class="logo-tile"><img src="images/logos/project-marvel-logo-white.svg" alt="Project Marvel"></div>
-          <div class="logo-tile"><img src="images/logos/h-e-b_logo.svg" alt="H-E-B"></div>
-          <div class="logo-tile"><img src="images/logos/utsa-downtown-campus-logo---white.svg" alt="UTSA Downtown Campus"></div>
-          <div class="logo-tile"><img src="images/logos/tobin-center-logo-color-white.svg" alt="Tobin Center for the Performing Arts"></div>
-          <div class="logo-tile"><img src="images/logos/la-villita-logo.svg" alt="La Villita Historic Arts Village"></div>
-          <div class="logo-tile"><img src="images/logos/pearl-district.svg" alt="Pearl District"></div>
-          <div class="logo-tile"><img src="images/logos/san-antonio-international-airport-white.svg" alt="San Antonio International Airport"></div>
-          <div class="logo-tile"><img src="images/logos/seaworld_san_antonio_logo-white.svg" alt="SeaWorld San Antonio"></div>
+          <button type="button" class="logo-tile" data-gen="The Alamo" aria-label="Show The Alamo on the map"><img src="images/logos/the-alamo-logo.svg" alt="The Alamo"></button>
+          <button type="button" class="logo-tile" data-gen="San Antonio River Walk" aria-label="Show San Antonio River Walk on the map"><img src="images/logos/san-antonio-riverwalk-logo-white.svg" alt="San Antonio River Walk"></button>
+          <button type="button" class="logo-tile" data-gen="Henry B. González Convention Center" aria-label="Show Henry B. González Convention Center on the map"><img src="images/logos/henry-b-gonzales-convention-center-logo-white.svg" alt="Henry B. González Convention Center"></button>
+          <button type="button" class="logo-tile" data-gen="Hemisfair" aria-label="Show Hemisfair on the map"><img src="images/logos/hemisfair-logo_white.svg" alt="Hemisfair"></button>
+          <button type="button" class="logo-tile" data-gen="@marvel" aria-label="Show Project Marvel on the map"><img src="images/logos/project-marvel-logo-white.svg" alt="Project Marvel"></button>
+          <button type="button" class="logo-tile" data-gen="H-E-B Corporate Office Headquarters" aria-label="Show H-E-B on the map"><img src="images/logos/h-e-b_logo.svg" alt="H-E-B"></button>
+          <button type="button" class="logo-tile" data-gen="UTSA Downtown Campus" aria-label="Show UTSA Downtown Campus on the map"><img src="images/logos/utsa-downtown-campus-logo---white.svg" alt="UTSA Downtown Campus"></button>
+          <button type="button" class="logo-tile" data-gen="Tobin Center for the Performing Arts" aria-label="Show Tobin Center for the Performing Arts on the map"><img src="images/logos/tobin-center-logo-color-white.svg" alt="Tobin Center for the Performing Arts"></button>
+          <button type="button" class="logo-tile" data-gen="La Villita Historic Arts Village" aria-label="Show La Villita Historic Arts Village on the map"><img src="images/logos/la-villita-logo.svg" alt="La Villita Historic Arts Village"></button>
+          <button type="button" class="logo-tile" data-gen="Pearl District" aria-label="Show Pearl District on the map"><img src="images/logos/pearl-district.svg" alt="Pearl District"></button>
+          <button type="button" class="logo-tile" data-gen="San Antonio International Airport" aria-label="Show San Antonio International Airport on the map"><img src="images/logos/san-antonio-international-airport-white.svg" alt="San Antonio International Airport"></button>
+          <button type="button" class="logo-tile" data-gen="SeaWorld San Antonio" aria-label="Show SeaWorld San Antonio on the map"><img src="images/logos/seaworld_san_antonio_logo-white.svg" alt="SeaWorld San Antonio"></button>
         </div>
       </div>
     </div>
@@ -1637,6 +1639,28 @@ svg.leaflet-image-layer.leaflet-interactive path {
         }
         rows.forEach(function (row) {
           row.addEventListener("click", function () { selectRow(parseInt(row.dataset.index, 10)); });
+        });
+        // "Surrounded by Leading Demand Drivers" logos jump to their map pin.
+        var marvelPts = ["Henry B. González Convention Center", "Hemisfair", "Alamodome"];
+        function focusGenerator(name) {
+          if (name === "@marvel") {
+            rows.forEach(function (r) { r.classList.remove("active"); });
+            var b = L.latLngBounds(GENERATORS.filter(function (g) { return marvelPts.indexOf(g.name) > -1; })
+              .map(function (g) { return [g.lat, g.lng]; }));
+            map.flyToBounds(b.pad(0.25));
+            L.popup().setLatLng(b.getCenter()).setContent("Project Marvel District").openOn(map);
+            return;
+          }
+          for (var k = 0; k < GENERATORS.length; k++) { if (GENERATORS[k].name === name) { selectRow(k); return; } }
+        }
+        document.querySelectorAll(".logo-tile[data-gen]").forEach(function (btn) {
+          btn.addEventListener("click", function () {
+            var target = document.getElementById("demand-map");
+            var r = target.getBoundingClientRect();
+            var visible = r.top >= 60 && r.bottom <= window.innerHeight;
+            target.scrollIntoView({ behavior: "smooth", block: "center" });
+            setTimeout(function () { focusGenerator(btn.dataset.gen); }, visible ? 0 : 650);
+          });
         });
         document.getElementById("reset-map").addEventListener("click", function () {
           rows.forEach(function (r) { r.classList.remove("active"); });
