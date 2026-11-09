@@ -779,7 +779,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
        background:var(--red);color:#fff;writing-mode:vertical-rl;text-orientation:sideways;
        padding:22px 11px;font-family:var(--font-body);font-size:11px;font-weight:600;
        letter-spacing:.2em;text-transform:uppercase;text-decoration:none;
-       border-radius:0 3px 3px 0;transition:background .2s,transform 3s cubic-bezier(.22,1,.36,1)}
+       border-radius:0 3px 3px 0;transition:background .2s,transform 7s cubic-bezier(.22,1,.36,1)}
   .side-cta:hover{background:var(--red-lt)}
   .side-cta.away{transform:translate(-110%,-50%);transition:background .2s,transform .35s cubic-bezier(.55,0,.75,.2)}
   @media(max-width:900px){.side-cta{display:none}}
@@ -1082,7 +1082,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
 
   <a href="#contact" class="side-cta">Sign CA</a>
   <script>
-    // Sign CA tab: slides away while scrolling, slides back in (3s) once scrolling stops.
+    // Sign CA tab: slides away while scrolling, slides back in (7s) once scrolling stops.
     (function () {
       var tab = document.querySelector(".side-cta"), idle;
       window.addEventListener("scroll", function () {
